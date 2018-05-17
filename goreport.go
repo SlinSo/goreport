@@ -3,12 +3,13 @@ package goreport
 import (
 	"bytes"
 	//"fmt"
-	"github.com/mikeshimura/dbflute/df"
 	"io/ioutil"
 	"os"
 	"reflect"
 	"strconv"
 	"strings"
+
+	"github.com/mikeshimura/dbflute/df"
 )
 
 const (
@@ -162,7 +163,7 @@ func (r *GoReport) ExecutePageFooter() {
 	h := r.Bands[PageFooter]
 	if h != nil {
 		height := (*h).GetHeight(*r)
-		(*h).Execute(*r)
+		(*h).Execute(r)
 		r.CurrY += height
 	}
 }
@@ -171,7 +172,7 @@ func (r *GoReport) ExecuteSummary() {
 	if h != nil {
 		height := (*h).GetHeight(*r)
 		r.PageBreakCheck(height)
-		(*h).Execute(*r)
+		(*h).Execute(r)
 		r.CurrY += height
 	}
 }
@@ -179,7 +180,7 @@ func (r *GoReport) ExecutePageHeader() {
 	h := r.Bands[PageHeader]
 	if h != nil {
 		height := (*h).GetHeight(*r)
-		(*h).Execute(*r)
+		(*h).Execute(r)
 		r.CurrY += height
 	}
 }
@@ -189,7 +190,7 @@ func (r *GoReport) ExecuteGroupHeader(level int) {
 		if h != nil {
 			height := (*h).GetHeight(*r)
 			r.PageBreakCheck(height)
-			(*h).Execute(*r)
+			(*h).Execute(r)
 			r.CurrY += height
 		}
 	}
@@ -200,7 +201,7 @@ func (r *GoReport) ExecuteGroupSummary(level int) {
 		if h != nil {
 			height := (*h).GetHeight(*r)
 			r.PageBreakCheck(height)
-			(*h).Execute(*r)
+			(*h).Execute(r)
 			r.CurrY += height
 		}
 	}
@@ -229,7 +230,7 @@ func (r *GoReport) ExecuteDetail() {
 		}
 		height := (*h).GetHeight(*r)
 		r.PageBreakCheck(height)
-		(*h).Execute(*r)
+		(*h).Execute(r)
 		r.CurrY += height
 		if r.MaxGroup > 0 {
 			aft := reflect.ValueOf(deti).MethodByName("BreakCheckAfter")
@@ -302,8 +303,8 @@ func (r *GoReport) TextColor(red int, green int, blue int) {
 		"\t" + strconv.Itoa(blue))
 }
 func (r *GoReport) StrokeColor(red int, green int, blue int) {
-    r.AddLine("SC\t" + strconv.Itoa(red) + "\t" + strconv.Itoa(green) +
-        "\t" + strconv.Itoa(blue))
+	r.AddLine("SC\t" + strconv.Itoa(red) + "\t" + strconv.Itoa(green) +
+		"\t" + strconv.Itoa(blue))
 }
 func (r *GoReport) GrayFill(grayScale float64) {
 	r.AddLine("GF\t" + Ftoa(grayScale))
@@ -384,7 +385,7 @@ func (r *GoReport) SaveText(fileName string) {
 
 type Band interface {
 	GetHeight(report GoReport) float64
-	Execute(report GoReport)
+	Execute(report *GoReport)
 }
 
 func CreateGoReport() *GoReport {
