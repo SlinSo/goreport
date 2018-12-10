@@ -222,7 +222,7 @@ func (r *GoReport) ExecuteDetail() {
 			if bfr.IsValid() == false {
 				panic("BreakCheckBefore function not exist in Detail")
 			}
-			res := bfr.Call([]reflect.Value{reflect.ValueOf(*r)})
+			res := bfr.Call([]reflect.Value{reflect.ValueOf(r)})
 			level := res[0].Int()
 			if level > 0 {
 				r.ExecuteGroupHeader(int(level))
@@ -237,7 +237,7 @@ func (r *GoReport) ExecuteDetail() {
 			if aft.IsValid() == false {
 				panic("BreakCheckAfter function not exist in Detail")
 			}
-			res := aft.Call([]reflect.Value{reflect.ValueOf(*r)})
+			res := aft.Call([]reflect.Value{reflect.ValueOf(r)})
 			level := res[0].Int()
 			if level > 0 {
 				r.ExecuteGroupSummary(int(level))
