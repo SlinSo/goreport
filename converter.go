@@ -1,11 +1,13 @@
 package goreport
 
 import (
+	"bytes"
 	"fmt"
-	"github.com/signintech/gopdf"
 	"io/ioutil"
 	"strconv"
 	"strings"
+
+	"github.com/signintech/gopdf"
 )
 
 type Converter struct {
@@ -49,7 +51,7 @@ func (p *Converter) Execute() {
 		case "TC":
 			p.TextColor(line, eles)
 		case "SC":
-            		p.StrokeColor(line, eles)
+			p.StrokeColor(line, eles)
 		case "GF", "GS":
 			p.Grey(line, eles)
 		case "C", "C1", "CR":
@@ -73,9 +75,17 @@ func (p *Converter) Execute() {
 }
 func (p *Converter) AddFont() {
 	for _, font := range p.Fonts {
-		err := p.Pdf.AddTTFFont(font.FontName, font.FileName)
-		if err != nil {
-			panic("font file:" + font.FileName + " not found")
+		if font.Embedded != nil {
+			err := p.Pdf.AddTTFFontByReader(font.FontName, bytes.NewReader(font.Embedded))
+			if err != nil {
+				panic("embedded font:" + font.FontName + " could not be added")
+			}
+
+		} else {
+			err := p.Pdf.AddTTFFont(font.FontName, font.FileName)
+			if err != nil {
+				panic("font file:" + font.FileName + " not found")
+			}
 		}
 	}
 
@@ -149,9 +159,9 @@ func (p *Converter) TextColor(line string, eles []string) {
 		uint8(AtoiPanic(eles[2], line)), uint8(AtoiPanic(eles[3], line)))
 }
 func (p *Converter) StrokeColor(line string, eles []string) {
-    CheckLength(line, eles, 4)
-    p.Pdf.SetStrokeColor(uint8(AtoiPanic(eles[1], line)),
-        uint8(AtoiPanic(eles[2], line)), uint8(AtoiPanic(eles[3], line)))
+	CheckLength(line, eles, 4)
+	p.Pdf.SetStrokeColor(uint8(AtoiPanic(eles[1], line)),
+		uint8(AtoiPanic(eles[2], line)), uint8(AtoiPanic(eles[3], line)))
 }
 func (p *Converter) Oval(line string, eles []string) {
 	CheckLength(line, eles, 5)
@@ -283,4 +293,5 @@ func ParseFloatPanic(s string, line string) float64 {
 type FontMap struct {
 	FontName string
 	FileName string
+	Embedded []byte
 }
