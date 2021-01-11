@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/mikeshimura/dbflute/df"
+	"github.com/SlinSo/goreport/util"
 )
 
 const (
@@ -90,7 +90,7 @@ func (r *GoReport) ReplacePageTotal() {
 		return
 	}
 	lines := strings.Split(r.Converter.Text, "\n")
-	list := new(df.List)
+	list := new(util.List)
 	for i, line := range lines {
 		if len(line) < 8 {
 			continue
@@ -116,7 +116,7 @@ func (r *GoReport) ReplacePageTotal() {
 	}
 	r.Converter.Text = buf.String()
 }
-func (r *GoReport) getTotalPage(lineno int, list *df.List) int {
+func (r *GoReport) getTotalPage(lineno int, list *util.List) int {
 	count := 0
 	page := 0
 	for i, l := range list.GetAsArray() {

@@ -2,7 +2,7 @@ package example
 
 import (
 	//"fmt"
-	gr "github.com/mikeshimura/goreport"
+	gr "github.com/SlinSo/goreport"
 	"time"
 	"unicode"
 	//"io/ioutil"

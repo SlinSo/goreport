@@ -1,52 +1,51 @@
 # goreport
+
 Golang Pdf Report Generator  
-[日本語の説明はこちら](https://github.com/mikeshimura/goreport/wiki/%E6%97%A5%E6%9C%AC%E8%AA%9E%E8%AA%AC%E6%98%8E)
+[日本語の説明はこちら](https://github.com/SlinSo/goreport/wiki/%E6%97%A5%E6%9C%AC%E8%AA%9E%E8%AA%AC%E6%98%8E)
 
 This program use github.com/signintech/gopdf for pdf generation.
 
 Simple report sample
-![Simple1](https://bytebucket.org/mikeshimura/goreport/wiki/image/simple1.jpg "Simple1")  
+![Simple1](https://bytebucket.org/SlinSo/goreport/wiki/image/simple1.jpg 'Simple1')
 
-[pdf](https://bytebucket.org/mikeshimura/goreport/wiki/pdf/simple1.pdf)  
-
+[pdf](https://bytebucket.org/SlinSo/goreport/wiki/pdf/simple1.pdf)
 
 Medium report sample
-![Medium1](https://bytebucket.org/mikeshimura/goreport/wiki/image/medium1.jpg "Medium1")
+![Medium1](https://bytebucket.org/SlinSo/goreport/wiki/image/medium1.jpg 'Medium1')
 
-[pdf](https://bytebucket.org/mikeshimura/goreport/wiki/pdf/medium1.pdf)  
-
-
+[pdf](https://bytebucket.org/SlinSo/goreport/wiki/pdf/medium1.pdf)
 
 Complex report sample
-![Complex1](https://bytebucket.org/mikeshimura/goreport/wiki/image/complex1.jpg "Complex1")
+![Complex1](https://bytebucket.org/SlinSo/goreport/wiki/image/complex1.jpg 'Complex1')
 
-[pdf](https://bytebucket.org/mikeshimura/goreport/wiki/pdf/complex1.pdf)  
+[pdf](https://bytebucket.org/SlinSo/goreport/wiki/pdf/complex1.pdf)
 
+![Complex2](https://bytebucket.org/SlinSo/goreport/wiki/image/complex2.jpg 'Complex2')
 
-![Complex2](https://bytebucket.org/mikeshimura/goreport/wiki/image/complex2.jpg "Complex2")
-
-[pdf](https://bytebucket.org/mikeshimura/goreport/wiki/pdf/complex2.pdf)  
+[pdf](https://bytebucket.org/SlinSo/goreport/wiki/pdf/complex2.pdf)
 
 ## Installation
+
 ```
-go get -u github.com/mikeshimura/goreport
+go get -u github.com/SlinSo/goreport
 ```
+
 ## concept
+
 - Following Bands are available.  
-PageHeader  
-GroupHeader2  
-GroupHeader1  
-Detail  
-GroupSummary1  
-GroupSummry2  
-Summary  
-PageFooter
+  PageHeader  
+  GroupHeader2  
+  GroupHeader1  
+  Detail  
+  GroupSummary1  
+  GroupSummry2  
+  Summary  
+  PageFooter
 
 - Groups can be any number
 
 - User defined Band structure required to implement Band interface.  
-Only two functions are required.
-
+  Only two functions are required.
 
 ```
 GetHeight(report GoReport) float64
@@ -54,22 +53,27 @@ Execute(report GoReport)
 ```
 
 - Two step executiion.  
-First step: Generate Text data.  
-Second step: Generate Pdf from Text data.
+  First step: Generate Text data.  
+  Second step: Generate Pdf from Text data.
 
 - Above two step execution enable very flexible usability.  
-You may generate Text data by program, then any kind of pdf can be generated.
+  You may generate Text data by program, then any kind of pdf can be generated.
 
-- I use above flexibity to insert total pages data after generation automatically.
+- I use above flexibity to insert total pages data after generation
+  automatically.
 
-- Band height can be changed program, therefore conditional display can be achieved.
+- Band height can be changed program, therefore conditional display can be
+  achieved.
 
-- Data source is stored as []interface{}, then any kind of data type can be used. For example, string array, entity object, map etc.
+- Data source is stored as []interface{}, then any kind of data type can be
+  used. For example, string array, entity object, map etc.
 
 - Any Ttf Font can be used
 
 ## Setup Commands
+
 - Font Setting Sample
+
 ```
 font1 := gr.FontMap{
 		FontName: "IPAex",
@@ -78,61 +82,65 @@ font1 := gr.FontMap{
 fonts := []*gr.FontMap{&font1}
 r.SetFonts(fonts)
 ```
+
 - Page Setting  
- SetPage(size string, unit string, orientation string)  
- //size A4 or LTR, unit mm, pt or in  
+  SetPage(size string, unit string, orientation string)  
+  //size A4 or LTR, unit mm, pt or in
 
- SetPageByDimension(unit string, width float64, height float64)  
-- Normal Print limit setting. PageFooter(if defined) will be written after reach this limt.  
- SetFooterY(footerY float64)  
+SetPageByDimension(unit string, width float64, height float64)
 
- SetFooterYbyFooterHeight(footerHeight float64)  
- //Sheet height - footerHeight will be set  
+- Normal Print limit setting. PageFooter(if defined) will be written after reach
+  this limt.  
+  SetFooterY(footerY float64)
+
+SetFooterYbyFooterHeight(footerHeight float64)  
+ //Sheet height - footerHeight will be set
 
 ## Draw Commands
 
 - New Page  
-NewPage(resetPageNo bool)
-
+  NewPage(resetPageNo bool)
 
 - Font setting  
-Font(fontName string, size int, style string)  
-//style "" or "U" (underline)  
+  Font(fontName string, size int, style string)  
+  //style "" or "U" (underline)
 
- TextColor(red int, green int, blue int) //Set Font color  
- GrayFill(grayScale float64) //Set grayScale for black font  
+TextColor(red int, green int, blue int) //Set Font color  
+ GrayFill(grayScale float64) //Set grayScale for black font
 
 - Text Draw  
- Cell(x float64, y float64, content string)  
- CellRight(x float64, y float64, w float64, content string)  //Right Justify  
+  Cell(x float64, y float64, content string)  
+  CellRight(x float64, y float64, w float64, content string) //Right Justify
 
 - Line Draw  
- LineType(ltype string, width float64)
- //lineType "dashed" ,"dotted","straight" ""="straight"  
- GrayStroke(grayScale float64)  //Set grayScale  
- LineH(x1 float64, y float64, x2 float64) // Horizontal Line  
- LineV(x float64, y1 float64, y2 float64) // Vertical line  
- Line(x1 float64, y1 float64, x2 float64, y2 float64)  
+  LineType(ltype string, width float64) //lineType "dashed" ,"dotted","straight"
+  ""="straight"  
+  GrayStroke(grayScale float64) //Set grayScale  
+  LineH(x1 float64, y float64, x2 float64) // Horizontal Line  
+  LineV(x float64, y1 float64, y2 float64) // Vertical line  
+  Line(x1 float64, y1 float64, x2 float64, y2 float64)
 
 - Shape Draw  
- Rect(x1 float64, y1 float64, x2 float64, y2 float64)  
- Oval(x1 float64, y1 float64, x2 float64, y2 float64)  
+  Rect(x1 float64, y1 float64, x2 float64, y2 float64)  
+  Oval(x1 float64, y1 float64, x2 float64, y2 float64)
 
-- Image  Draw  
-  Image(path string, x1 float64, y1 float64, x2 float64, y2 float64)  
+- Image Draw  
+  Image(path string, x1 float64, y1 float64, x2 float64, y2 float64)
 
 ## Genarate Commands
--  Execute(filename string)  
-Genarate PDF File.
+
+- Execute(filename string)  
+  Genarate PDF File.
 
 - GetBytesPdf() (ret []byte)  
-Create byte stream
+  Create byte stream
 
-## License  
+## License
 
-goreport is released under the MIT License. It is copyrighted by Masanobu Shimura. (Gmail mikeshimura)
+goreport is released under the MIT License. It is copyrighted by Masanobu
+Shimura. (Gmail mikeshimura)
 
-## Limitation  
+## Limitation
 
 - Font style not allow B(bold) and I(italic).
 - Line, Rect and Oval are Black and Gray only.
@@ -140,12 +148,13 @@ goreport is released under the MIT License. It is copyrighted by Masanobu Shimur
 
 ## Sample program
 
-[sample source](https://github.com/mikeshimura/goreport/tree/master/example)
+[sample source](https://github.com/SlinSo/goreport/tree/master/example)
+
 ```go
 package example
 
 import (
-	gr "github.com/mikeshimura/goreport"
+	gr "github.com/SlinSo/goreport"
 	"strconv"
 )
 
